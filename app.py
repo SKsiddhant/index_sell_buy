@@ -377,6 +377,214 @@ CATEGORIES = {
         "Dredging Corp":               "DREDGECORP.NS",
     },
 
+    # ── INDIAN MUTUAL FUNDS — NIFTY / INDEX FUNDS (ETF listed on NSE) ──
+    "🏦 MF — Index & Nifty Funds (ETF)": {
+        "Nippon India Nifty 50 BeES ETF":          "NIFTYBEES.NS",
+        "SBI Nifty 50 ETF":                        "SETFNIF50.NS",
+        "HDFC Nifty 50 ETF":                       "HDFCNIFTY.NS",
+        "Kotak Nifty 50 ETF":                      "KOTAKNIFTY.NS",
+        "ICICI Pru Nifty 50 ETF":                  "ICICIB22.NS",
+        "Axis Nifty 100 ETF":                      "AXISNIFTY.NS",
+        "Nippon India Nifty Next 50 Jr BeES":      "JUNIORBEES.NS",
+        "Motilal Nifty Next 50 ETF":               "MOM50.NS",
+        "Nippon India Nifty 500 ETF":              "NIF500BEES.NS",
+        "Mirae Asset NYSE FANG+ ETF":              "MAFANG.NS",
+        "Motilal Oswal Nasdaq 100 ETF":            "MOM100.NS",
+        "Mirae Asset S&P 500 Top 50 ETF":          "MASPX.NS",
+        "Edelweiss US Tech ETF":                   "USTECH.NS",
+        "Mirae Asset Hang Seng Tech ETF":          "MIAEHSTECH.NS",
+        "Nippon India Nifty Midcap 150 ETF":       "NM150BEES.NS",
+        "Motilal Oswal Midcap 100 ETF":            "MOM.NS",
+        "Nippon India Nifty Smallcap ETF":         "SETFSMALL.NS",
+        "HDFC Sensex ETF":                         "HDFCSENSEX.NS",
+        "SBI Sensex ETF":                          "SETFBSE.NS",
+        "Kotak Sensex ETF":                        "KOTAKSENSEX.NS",
+    },
+
+    # ── INDIAN MUTUAL FUNDS — SECTORAL ETFs ───────────────────────────
+    "🏦 MF — Sectoral & Thematic Funds (ETF)": {
+        "Nippon India Bank BeES ETF":              "BANKBEES.NS",
+        "Kotak Banking ETF":                       "KOTAKBKETF.NS",
+        "SBI Banking & Fin Services ETF":          "SETFNIFBK.NS",
+        "ICICI Pru Nifty Bank ETF":                "ICICIBANKN.NS",
+        "Mirae Asset Banking & Fin ETF":           "MIAEBFETF.NS",
+        "Nippon India IT BeES ETF":                "ITBEES.NS",
+        "SBI IT ETF":                              "SETFNIT.NS",
+        "Nippon India Pharma BeES ETF":            "PHARMABEES.NS",
+        "SBI Pharma ETF":                          "SETFNIFPHARMA.NS",
+        "Nippon India PSU Bank BeES ETF":          "PSUBNKBEES.NS",
+        "Kotak PSU Bank ETF":                      "KOTAKPSUBK.NS",
+        "Nippon India Infra BeES ETF":             "INFRABEES.NS",
+        "Nippon India Consumption BeES ETF":       "CONSUMBEES.NS",
+        "Nippon India Nifty India Mfg ETF":        "MAFSETF.NS",
+        "Mirae Asset Healthcare ETF":              "MIAEHEALTHCARE.NS",
+        "Motilal Oswal S&P BSE Healthcare ETF":    "MOHEALTHCARE.NS",
+        "Kotak Nifty Auto ETF":                    "KOTAKAUTO.NS",
+        "ICICI Pru Nifty FMCG ETF":               "ICICIFMCG.NS",
+        "Nippon India Nifty Metal BeES ETF":       "METALBEES.NS",
+        "ICICI Pru Nifty Realty ETF":              "ICICIREAL.NS",
+        "Mirae Asset Nifty India Defence ETF":     "MIAEDEFENCE.NS",
+        "Edelweiss Nifty India Defence ETF":       "NIFTYDEFENCE.NS",
+        "Bharat 22 ETF (Govt Disinvestment)":      "BHARAT22ETF.NS",
+        "CPSE ETF":                                "CPSEETF.NS",
+        "Nippon India Energy BeES ETF":            "ENERGYBEES.NS",
+        "ICICI Pru Nifty Oil & Gas ETF":           "ICICIOILGAS.NS",
+        "Motilal Oswal S&P BSE Low Vol 30 ETF":    "MOLO.NS",
+        "DSP Nifty 50 Equal Weight ETF":           "DSPNIFTY.NS",
+        "Nippon India Nifty Quality 30 ETF":       "NV20BEES.NS",
+        "Nippon India Nifty 100 Low Vol 30 ETF":   "LOWVOLBEES.NS",
+        "ICICI Pru Alpha Low Vol 30 ETF":          "ICICIALPLV.NS",
+        "DSP Nifty Private Bank ETF":              "DSPNIFTYPB.NS",
+        "Axis Financial Services ETF":             "AXISFINSERV.NS",
+    },
+
+    # ── INDIAN MUTUAL FUNDS — COMMODITY FUNDS (ETF) ───────────────────
+    "🏦 MF — Commodity Funds (Gold / Silver ETF)": {
+        "Nippon India Gold BeES ETF":              "GOLDBEES.NS",
+        "HDFC Gold ETF":                           "HDFCMFGETF.NS",
+        "SBI Gold ETF":                            "SBIGETS.NS",
+        "Kotak Gold ETF":                          "KOTAKGOLD.NS",
+        "Axis Gold ETF":                           "AXISGOLD.NS",
+        "ICICI Pru Gold ETF":                      "ICICIGOLD.NS",
+        "UTI Gold ETF":                            "UTIGL.NS",
+        "Quantum Gold ETF":                        "QGOLDHALF.NS",
+        "Invesco India Gold ETF":                  "IVZINGOLD.NS",
+        "Aditya Birla Gold ETF":                   "BSLGOLDETF.NS",
+        "DSP World Gold Fund-of-Fund ETF":         "DSPGOLDETF.NS",
+        "Canara Robeco Gold Savings ETF":          "CRGOLDETF.NS",
+        "Nippon India Silver BeES ETF":            "SILVERBEES.NS",
+        "Mirae Asset Silver ETF":                  "SILVERETF.NS",
+        "Kotak Silver ETF":                        "KOTAKSILV.NS",
+        "ICICI Pru Silver ETF":                    "ICICISILVER.NS",
+        "Axis Silver ETF":                         "AXISSILVER.NS",
+        "HDFC Silver ETF":                         "HDFC-SILV-ETF.NS",
+        "DSP Silver ETF":                          "DSPSILVER.NS",
+        "Aditya Birla Silver ETF":                 "BSLSILVERETF.NS",
+    },
+
+    # ── INDIAN MUTUAL FUNDS — FOF / FundOfFunds (NAV-based, BSE listed) ─
+    "🏦 MF — Fund of Funds (BSE Listed)": {
+        "Motilal Oswal Nasdaq 100 FOF":            "0P0001DRGB.BO",
+        "Edelweiss Greater China Equity FOF":      "0P0001F88P.BO",
+        "DSP World Agriculture FOF":               "0P0000XVVB.BO",
+        "Kotak Global Emerging Market FOF":        "0P0000Y8JQ.BO",
+        "Franklin India Feeder Franklin US Opps":  "0P0000Y8FU.BO",
+        "ICICI Pru US Bluechip Equity FOF":        "0P0001HV9Q.BO",
+        "Mirae Asset NYSE FANG+ FOF":              "0P0001I0DW.BO",
+        "Navi US Total Stock Market FOF":          "0P0001M4YU.BO",
+        "Nippon India US Equity Opp FOF":          "0P0001HWC0.BO",
+        "SBI International Access US Equity FOF":  "0P0001IT5E.BO",
+        "PGIM India Global Equity Opp FOF":        "0P0001HXF4.BO",
+        "Axis Greater China Equity FOF":           "0P0001IYF7.BO",
+        "Kotak Pioneer Fund FOF":                  "0P0001IX04.BO",
+        "DSP US Flexible Equity FOF":              "0P0000XVVA.BO",
+    },
+
+    # ── DIRECT-PLAN MUTUAL FUNDS (NSE MFSS listed) ────────────────────
+    "🏦 MF — Equity Funds (NSE/BSE MF Platform)": {
+        # Large Cap
+        "Axis Bluechip Fund Direct":               "0P0000XVN4.BO",
+        "Mirae Asset Large Cap Direct":            "0P0000YHXH.BO",
+        "Canara Robeco Bluechip Direct":           "0P0001DKZM.BO",
+        "HDFC Top 100 Direct":                     "0P0000XVQS.BO",
+        "SBI Bluechip Direct":                     "0P0000YIW1.BO",
+        "ICICI Pru Bluechip Direct":               "0P0000YHYL.BO",
+        "Kotak Bluechip Direct":                   "0P0000YHXG.BO",
+        "Nippon India Large Cap Direct":           "0P0000YHZJ.BO",
+        "UTI Nifty 200 Momentum 30 Direct":        "0P0001I6NV.BO",
+        # Flexi Cap
+        "Parag Parikh Flexi Cap Direct":           "0P0001DKZP.BO",
+        "HDFC Flexi Cap Direct":                   "0P0000XVQT.BO",
+        "Kotak Flexicap Direct":                   "0P0000YHY7.BO",
+        "UTI Flexi Cap Direct":                    "0P0000YIZ8.BO",
+        "DSP Flexi Cap Direct":                    "0P0000XVUZ.BO",
+        "Franklin India Flexi Cap Direct":         "0P0000Y8FT.BO",
+        "SBI Flexi Cap Direct":                    "0P0001F5WC.BO",
+        "Mirae Asset Flexi Cap Direct":            "0P0001HWCW.BO",
+        # Mid Cap
+        "Nippon India Growth Direct":              "0P0000YI38.BO",
+        "HDFC Mid-Cap Opps Direct":                "0P0000XVQW.BO",
+        "Kotak Emerging Equity Direct":            "0P0000YHY8.BO",
+        "Axis Midcap Direct":                      "0P0001DKZK.BO",
+        "DSP Midcap Direct":                       "0P0000XVV0.BO",
+        "SBI Magnum Midcap Direct":                "0P0000YJIP.BO",
+        "Mirae Asset Midcap Direct":               "0P0001HWCU.BO",
+        "Edelweiss Midcap Direct":                 "0P0001F8DX.BO",
+        # Small Cap
+        "Nippon India Smallcap Direct":            "0P0000YI45.BO",
+        "HDFC Small Cap Direct":                   "0P0000XVQX.BO",
+        "Axis Smallcap Direct":                    "0P0001DKZN.BO",
+        "SBI Small Cap Direct":                    "0P0000YK3X.BO",
+        "Kotak Smallcap Direct":                   "0P0001DKZL.BO",
+        "DSP Small Cap Direct":                    "0P0000XVV1.BO",
+        "Canara Robeco Small Cap Direct":          "0P0001DKZN.BO",
+        # ELSS / Tax Saving
+        "Axis Long Term Equity (ELSS) Direct":     "0P0000XVN3.BO",
+        "Mirae Asset Tax Saver Direct":            "0P0001HWCA.BO",
+        "Canara Robeco ELSS Tax Saver Direct":     "0P0001DKZQ.BO",
+        "DSP Tax Saver Direct":                    "0P0000XVUX.BO",
+        "Nippon India Tax Saver Direct":           "0P0000YI33.BO",
+        "SBI Long Term Equity Direct":             "0P0000YJA2.BO",
+        "HDFC ELSS Tax Saver Direct":              "0P0000XVQR.BO",
+        "Kotak Tax Saver Direct":                  "0P0000YHXJ.BO",
+        "Franklin India Taxshield Direct":         "0P0000Y8FS.BO",
+        "PGIM India ELSS Tax Saver Direct":        "0P0001HWFZ.BO",
+        # Thematic
+        "Nippon India Consumption Direct":         "0P0000YI2T.BO",
+        "SBI Infra Direct":                        "0P0001F7RX.BO",
+        "ICICI Pru India Opps Direct":             "0P0001HV9M.BO",
+        "Tata India Consumer Direct":              "0P0001HWCY.BO",
+        "Nippon India Power & Infra Direct":       "0P0000YI2Y.BO",
+        "ICICI Pru Infra Direct":                  "0P0000YHYM.BO",
+        "DSP India T.I.G.E.R. Direct":             "0P0000XVUV.BO",
+        "Quant Infrastructure Direct":             "0P0001HWFE.BO",
+    },
+
+    # ── DEBT / HYBRID MUTUAL FUNDS (BSE listed) ───────────────────────
+    "🏦 MF — Debt & Hybrid Funds": {
+        # Hybrid
+        "HDFC Balanced Advantage Direct":          "0P0000XVQP.BO",
+        "ICICI Pru Balanced Advantage Direct":     "0P0000YHYI.BO",
+        "Kotak Balanced Advantage Direct":         "0P0001DKZG.BO",
+        "SBI Equity Hybrid Direct":                "0P0000YJAP.BO",
+        "Mirae Asset Hybrid Equity Direct":        "0P0001HWCV.BO",
+        "Canara Robeco Equity Hybrid Direct":      "0P0001DKZR.BO",
+        "DSP Equity & Bond Direct":                "0P0000XVUY.BO",
+        "Nippon India Equity Hybrid Direct":       "0P0000YI2P.BO",
+        "UTI Aggressive Hybrid Direct":            "0P0000YIY6.BO",
+        "Axis Equity Hybrid Direct":               "0P0001F88Q.BO",
+        # Multi Asset
+        "ICICI Pru Multi Asset Direct":            "0P0000YHYJ.BO",
+        "Nippon India Multi Asset Direct":         "0P0001I6NW.BO",
+        "Tata Multi Asset Opps Direct":            "0P0001HWCZ.BO",
+        "Quant Multi Asset Direct":                "0P0001HWFD.BO",
+        # Arbitrage
+        "Nippon India Arbitrage Direct":           "0P0000YI1L.BO",
+        "ICICI Pru Equity Arbitrage Direct":       "0P0000YHTB.BO",
+        "Kotak Equity Arbitrage Direct":           "0P0000YHTD.BO",
+        "SBI Arbitrage Opps Direct":               "0P0000YJAR.BO",
+        # Liquid / Overnight
+        "Nippon India Liquid ETF (LiquidBeES)":    "LIQUIDBEES.NS",
+        "HDFC Overnight Direct":                   "0P0000XVQN.BO",
+        "SBI Overnight Direct":                    "0P0001F7S2.BO",
+        "Kotak Overnight Direct":                  "0P0001DKZJ.BO",
+        # Short Duration
+        "HDFC Short Term Debt Direct":             "0P0000XVQY.BO",
+        "ICICI Pru Short Term Direct":             "0P0000YHYW.BO",
+        "SBI Short Term Debt Direct":              "0P0000YJAT.BO",
+        "Nippon India Short Duration Direct":      "0P0000YI3H.BO",
+        # Corporate Bond
+        "HDFC Corporate Bond Direct":              "0P0001F7R3.BO",
+        "Kotak Corporate Bond Direct":             "0P0001DKZH.BO",
+        "Axis Corporate Debt Direct":              "0P0001F88R.BO",
+        "Nippon India Corp Bond Direct":           "0P0001HV7X.BO",
+        # Gilt
+        "SBI Magnum Gilt Direct":                  "0P0000YJAO.BO",
+        "HDFC Gilt 10Y Constant Duration":         "0P0001F7R4.BO",
+        "ICICI Pru Constant Maturity Gilt":        "0P0001HV8V.BO",
+        "Nippon India Gilt Securities Direct":     "0P0000YI3E.BO",
+    },
+
     # ── WORLD INDICES ─────────────────────────────────────────────────
     "🌍 World Indices": {
         "S&P 500 (USA)":               "^GSPC",
@@ -469,14 +677,17 @@ Positions accumulate across multiple buy signals and are liquidated all at once 
     with col2:
         st.markdown("""
 ### What's Covered
-- **Nifty 50** all 50 stocks
-- **Mid & Small Cap** popular picks
-- **All Sectoral Indices** (Bank, IT, Pharma, Auto…)
-- **Broad Indices** (Nifty 50/100/200/500, Sensex…)
-- **PSU Stocks** (HAL, ONGC, SBI, IRFC…)
-- **Indian ETFs** (Gold, Silver, Nifty BeES…)
-- **Defence, EV, Renewable energy** themes
-- **World Indices** (S&P 500, Nikkei, DAX…)
+- **Nifty 50** — all 50 constituent stocks
+- **Mid & Small Cap** — 150+ popular picks
+- **All Sectoral Indices** — Bank, IT, Pharma, Auto, Defence…
+- **Broad Indices** — Nifty 50/100/200/500, Sensex…
+- **PSU Stocks** — HAL, ONGC, SBI, IRFC, PFC…
+- **Indian ETFs** — Gold, Silver, Nifty/Sensex BeES…
+- **Mutual Funds (ETF)** — Index, Sectoral, Commodity ETFs
+- **Mutual Funds (FOF)** — US, China, Global Fund-of-Funds
+- **Equity MFs** — Large/Mid/Small Cap, ELSS, Thematic
+- **Debt & Hybrid MFs** — Balanced, Liquid, Gilt, Corp Bond
+- **World Indices** — S&P 500, Nikkei, DAX, Hang Seng…
         """)
     st.stop()
 
@@ -493,6 +704,10 @@ with st.spinner(f"Downloading **{selected_name}** (`{ticker_symbol}`) …"):
 
 if raw is None or raw.empty:
     st.error(f"No data for `{ticker_symbol}`. Check ticker / date range.")
+    if ".BO" in ticker_symbol and "0P0" in ticker_symbol:
+        st.info("💡 **Mutual Fund NAV data** via BSE codes may have limited history on yfinance. "
+                "Try the ETF-listed equivalents under **MF — Index & Sectoral Funds** categories "
+                "for more reliable data (e.g. NIFTYBEES.NS, GOLDBEES.NS).")
     st.stop()
 
 if isinstance(raw.columns, pd.MultiIndex):

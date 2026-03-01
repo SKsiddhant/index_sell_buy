@@ -783,27 +783,32 @@ for i in range(1, len(df)):
 
     if ret <= buy_thr:
         invest_amt   = current_invest_amt
-        units_bought = invest_amt / price
-        units_held  += units_bought
-        total_invested += invest_amt
-        buy_cost_basis.append((units_bought, price))
+        units_bought = int(invest_amt // price)   # max whole units with this amount
+        if units_bought >= 1:
+            actual_spent    = units_bought * price    # actual Rs used (no fractions)
+            leftover        = invest_amt - actual_spent  # unspent remainder (ignored)
+            units_held     += units_bought
+            total_invested += actual_spent
+            buy_cost_basis.append((units_bought, price))
 
-        total_units_cost = sum(u * p for u, p in buy_cost_basis)
-        total_units_sum  = sum(u for u, _ in buy_cost_basis)
-        avg_cost = total_units_cost / total_units_sum
+            total_units_cost = sum(u * p for u, p in buy_cost_basis)
+            total_units_sum  = sum(u for u, _ in buy_cost_basis)
+            avg_cost = total_units_cost / total_units_sum
 
-        trades.append({
-            "Date":                    today,
-            "Action":                  "BUY",
-            "NAV / Price (Rs)":        round(price, 4),
-            "Amount Invested (Rs)":    round(invest_amt, 2),
-            "Units Bought":            round(units_bought, 4),
-            "Total Units Held":        round(units_held, 4),
-            "Avg Cost (Rs)":           round(avg_cost, 4),
-            "Daily Return (%)":        round(ret * 100, 3),
-            "Cumul Invested (Rs)":     round(total_invested, 2),
-            "Trade PnL (Rs)":          float("nan"),
-        })
+            trades.append({
+                "Date":                    today,
+                "Action":                  "BUY",
+                "NAV / Price (Rs)":        round(price, 4),
+                "Amount Invested (Rs)":    round(actual_spent, 2),
+                "Budget (Rs)":             round(invest_amt, 2),
+                "Leftover (Rs)":           round(leftover, 2),
+                "Units Bought":            units_bought,
+                "Total Units Held":        round(units_held, 2),
+                "Avg Cost (Rs)":           round(avg_cost, 4),
+                "Daily Return (%)":        round(ret * 100, 3),
+                "Cumul Invested (Rs)":     round(total_invested, 2),
+                "Trade PnL (Rs)":          float("nan"),
+            })
 
     elif ret >= sell_thr and units_held > 0:
         proceeds = units_held * price
@@ -1039,9 +1044,11 @@ if trades:
 
     fmt = {
         "NAV / Price (Rs)":      "{:.4f}",
+        "Budget (Rs)":           "{:,.2f}",
         "Amount Invested (Rs)":  "{:,.2f}",
-        "Units Bought":          "{:.4f}",
-        "Total Units Held":      "{:.4f}",
+        "Leftover (Rs)":         "{:,.2f}",
+        "Units Bought":          "{:,}",
+        "Total Units Held":      "{:,.2f}",
         "Avg Cost (Rs)":         "{:.4f}",
         "Daily Return (%)":      "{:+.3f}",
         "Cumul Invested (Rs)":   "{:,.2f}",
@@ -1106,7 +1113,7 @@ sell_df_yr = pd.DataFrame([t for t in trades if t["Action"] == "SELL ALL"])
 
 if not buy_df_yr.empty:
     buy_df_yr["Year"] = pd.to_datetime(buy_df_yr["Date"]).dt.year
-    yr_invested = buy_df_yr.groupby("Year")["Amount Invested (Rs)"].sum()
+    yr_invested = buy_df_yr.groupby("Year")["Amount Invested (Rs)"].sum()  # actual Rs spent
     yr_signals  = buy_df_yr.groupby("Year").size()
 
     sell_pnl_yr = pd.Series(dtype=float, name="Trade PnL (Rs)")

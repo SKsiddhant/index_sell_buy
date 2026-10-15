@@ -5,6 +5,9 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import date, timedelta
+import re
+
+from backtest import format_stat, run_backtest
 
 st.set_page_config(
     page_title="Indian Market & World Index Trading Simulator",
@@ -639,6 +642,10 @@ custom_ticker = st.sidebar.text_input(
 if custom_ticker.strip():
     ticker_symbol = custom_ticker.strip().upper()
     selected_name = ticker_symbol
+    # One symbol only: "AAPL MSFT" would download two tickers and break the single-ticker logic below
+    if not re.fullmatch(r"[A-Z0-9.^=&\-]{1,30}", ticker_symbol):
+        st.sidebar.error("Enter a single ticker symbol, e.g. IRFC.NS or ^NSEBANK.")
+        st.stop()
 
 st.sidebar.markdown(f"**Ticker:** `{ticker_symbol}`")
 st.sidebar.markdown("---")
@@ -663,6 +670,11 @@ cs, ce = st.sidebar.columns(2)
 start_date = cs.date_input("Start", value=date.today() - timedelta(days=365 * 3))
 end_date   = ce.date_input("End",   value=date.today())
 
+whole_units = st.sidebar.checkbox(
+    "Whole units only (like buying shares)", value=False,
+    help="Off: fractional units, like a mutual fund / index NAV. On: only whole units are bought, "
+         "so nothing is bought when one unit costs more than the per-signal amount.")
+
 run_btn = st.sidebar.button("🚀 Run Simulation", use_container_width=True, type="primary")
 
 # ══════════════════════════════════════════════════════════════════════
@@ -670,6 +682,10 @@ run_btn = st.sidebar.button("🚀 Run Simulation", use_container_width=True, typ
 # ══════════════════════════════════════════════════════════════════════
 st.title("📊 Indian Market & World Index — Drop-Buy / Rally-Sell Simulator")
 st.caption("Buy every dip, sell every rally. Backtest on 500+ Indian stocks, indices, ETFs, PSUs & world indices.")
+
+if start_date >= end_date:
+    st.sidebar.error("Start date must be before the end date.")
+    st.stop()
 
 if not run_btn:
     st.info("👈  Choose a category → instrument in the sidebar, set your thresholds, then click **Run Simulation**.")
@@ -680,7 +696,7 @@ if not run_btn:
 Each trading day:
 1. `daily_return = (Close_today / Close_yesterday) − 1`
 2. If return ≤ **−buy_drop %** → **INVEST ₹X** at today's NAV/price
-   - Units received = ₹X ÷ Price  *(fractional units, just like real MF)*
+   - Units received = ₹X ÷ Price  *(fractional units, like a mutual fund; tick "Whole units only" to buy shares)*
    - ₹X increases every year by the **step-up %**
 3. If return ≥ **+sell_rise %** AND holding units → **SELL ALL** at today's price
 4. Repeat — units stack up across multiple buy signals
@@ -709,7 +725,8 @@ No fixed starting capital needed — you invest on demand at each dip.
 # ══════════════════════════════════════════════════════════════════════
 @st.cache_data(ttl=3600)
 def fetch_data(ticker, start, end):
-    return yf.download(ticker, start=str(start), end=str(end),
+    # yfinance's `end` is exclusive: without +1 day the chosen end date (e.g. today) was never included
+    return yf.download(ticker, start=str(start), end=str(end + timedelta(days=1)),
                        progress=False, auto_adjust=True)
 
 with st.spinner(f"Downloading **{selected_name}** (`{ticker_symbol}`) …"):
@@ -741,134 +758,29 @@ if len(df) < 5:
     st.stop()
 
 # ══════════════════════════════════════════════════════════════════════
-
+#  BACKTEST ENGINE  (see backtest.py)
 # ══════════════════════════════════════════════════════════════════════
-#  BACKTEST ENGINE  — Amount-based, fractional units, annual step-up
-# ══════════════════════════════════════════════════════════════════════
-units_held      = 0.0
-buy_cost_basis  = []        # list of (units_bought, price)
-trades          = []
-port_vals       = []
-
-total_invested  = 0.0       # cumulative ₹ invested
-total_withdrawn = 0.0       # cumulative ₹ from sells
-realised_pnl    = 0.0
-
-buy_thr  = -buy_drop_pct  / 100.0
-sell_thr =  sell_rise_pct / 100.0
-
-current_year       = df.index[1].year
-current_invest_amt = float(invest_per_signal)
-
-# Pre-build year → ₹ per signal map
-year_invest_map = {}
-tmp_yr  = df.index[1].year
-tmp_amt = float(invest_per_signal)
-for _yr in range(tmp_yr, tmp_yr + 30):
-    year_invest_map[_yr] = round(tmp_amt, 2)
-    tmp_amt *= (1 + stepup_pct / 100.0)
-
-for i in range(1, len(df)):
-    today = df.index[i]
-    price = float(df["Close"].iloc[i])
-    ret   = float(df["Daily_Return"].iloc[i])
-
-    if np.isnan(ret):
-        continue
-
-    # Step-up on new year
-    if today.year != current_year:
-        current_year       = today.year
-        current_invest_amt = current_invest_amt * (1 + stepup_pct / 100.0)
-
-    if ret <= buy_thr:
-        invest_amt   = current_invest_amt
-        units_bought = int(invest_amt // price)   # max whole units with this amount
-        if units_bought >= 1:
-            actual_spent    = units_bought * price    # actual Rs used (no fractions)
-            leftover        = invest_amt - actual_spent  # unspent remainder (ignored)
-            units_held     += units_bought
-            total_invested += actual_spent
-            buy_cost_basis.append((units_bought, price))
-
-            total_units_cost = sum(u * p for u, p in buy_cost_basis)
-            total_units_sum  = sum(u for u, _ in buy_cost_basis)
-            avg_cost = total_units_cost / total_units_sum
-
-            trades.append({
-                "Date":                    today,
-                "Action":                  "BUY",
-                "NAV / Price (Rs)":        round(price, 4),
-                "Amount Invested (Rs)":    round(actual_spent, 2),
-                "Budget (Rs)":             round(invest_amt, 2),
-                "Leftover (Rs)":           round(leftover, 2),
-                "Units Bought":            units_bought,
-                "Total Units Held":        round(units_held, 2),
-                "Avg Cost (Rs)":           round(avg_cost, 4),
-                "Daily Return (%)":        round(ret * 100, 3),
-                "Cumul Invested (Rs)":     round(total_invested, 2),
-                "Trade PnL (Rs)":          float("nan"),
-            })
-
-    elif ret >= sell_thr and units_held > 0:
-        proceeds = units_held * price
-        total_units_cost = sum(u * p for u, p in buy_cost_basis)
-        total_units_sum  = sum(u for u, _ in buy_cost_basis)
-        avg_cost  = total_units_cost / total_units_sum
-        cost_basis = avg_cost * units_held
-        pnl        = proceeds - cost_basis
-
-        total_withdrawn += proceeds
-        realised_pnl    += pnl
-
-        trades.append({
-            "Date":                    today,
-            "Action":                  "SELL ALL",
-            "NAV / Price (Rs)":        round(price, 4),
-            "Amount Invested (Rs)":    float("nan"),
-            "Units Bought":            float("nan"),
-            "Total Units Held":        0.0,
-            "Avg Cost (Rs)":           round(avg_cost, 4),
-            "Daily Return (%)":        round(ret * 100, 3),
-            "Cumul Invested (Rs)":     round(total_invested, 2),
-            "Trade PnL (Rs)":          round(pnl, 2),
-        })
-        units_held     = 0.0
-        buy_cost_basis = []
-
-    port_vals.append({
-        "Date":            today,
-        "Price":           price,
-        "Units_Held":      units_held,
-        "Portfolio_Value": units_held * price + total_withdrawn,
-        "Total_Invested":  total_invested,
-    })
-
-pv_df = pd.DataFrame(port_vals).set_index("Date")
-
-final_price      = float(df["Close"].iloc[-1])
-unrealised_value = units_held * final_price
-unrealised_pnl   = (unrealised_value
-                    - sum(u * p for u, p in buy_cost_basis)) if units_held > 0 else 0.0
-total_current_value = total_withdrawn + unrealised_value
-
-net_pnl          = total_current_value - total_invested
-total_return_pct = (net_pnl / total_invested * 100) if total_invested > 0 else 0.0
-
-avg_cost_held = (
-    sum(u * p for u, p in buy_cost_basis) / sum(u for u, _ in buy_cost_basis)
-    if buy_cost_basis else 0.0
-)
-
-num_buys  = sum(1 for t in trades if t["Action"] == "BUY")
-num_sells = sum(1 for t in trades if t["Action"] == "SELL ALL")
-
-roll_max = pv_df["Portfolio_Value"].cummax()
-drawdown = (pv_df["Portfolio_Value"] - roll_max) / roll_max * 100
-max_dd   = float(drawdown.min())
-
 years = max((end_date - start_date).days / 365.25, 0.01)
-cagr  = ((total_current_value / total_invested) ** (1 / years) - 1) * 100 if total_invested > 0 else 0.0
+_res = run_backtest(df, buy_drop_pct, sell_rise_pct, invest_per_signal, stepup_pct, years, whole_units)
+units_held          = _res["units_held"]
+trades              = _res["trades"]
+pv_df               = _res["pv_df"]
+total_invested      = _res["total_invested"]
+total_withdrawn     = _res["total_withdrawn"]
+realised_pnl        = _res["realised_pnl"]
+final_price         = _res["final_price"]
+unrealised_value    = _res["unrealised_value"]
+unrealised_pnl      = _res["unrealised_pnl"]
+total_current_value = _res["total_current_value"]
+net_pnl             = _res["net_pnl"]
+total_return_pct    = _res["total_return_pct"]
+avg_cost_held       = _res["avg_cost_held"]
+num_buys            = _res["num_buys"]
+num_sells           = _res["num_sells"]
+drawdown            = _res["drawdown"]
+max_dd              = _res["max_dd"]
+cagr                = _res["cagr"]
+year_invest_map     = _res["year_invest_map"]
 
 invest_years = sorted(set(t.year for t in pd.to_datetime(df.index)))
 yr_table = [{"Year": yr,
@@ -904,7 +816,7 @@ r2.metric("📊 Total Return",   f"{total_return_pct:.2f}%")
 r3.metric("📅 CAGR (approx)", f"{cagr:.2f}%")
 r4.metric("🛒 Buy Signals",    num_buys)
 r5.metric("💰 Sell Signals",   num_sells)
-r6.metric("📉 Max Drawdown",   f"{max_dd:.2f}%")
+r6.metric("📉 Max Drawdown",   f"{max_dd:.2f}%", help="Time-weighted: measures the holdings only, so money added by later buys does not hide losses.")
 
 with st.expander("📅 Annual Step-Up Schedule — Rs per Buy Signal"):
     st.dataframe(pd.DataFrame(yr_table), use_container_width=True, hide_index=True)
@@ -1047,7 +959,7 @@ if trades:
         "Budget (Rs)":           "{:,.2f}",
         "Amount Invested (Rs)":  "{:,.2f}",
         "Leftover (Rs)":         "{:,.2f}",
-        "Units Bought":          "{:,}",
+        "Units Bought":          "{:,.4f}",
         "Total Units Held":      "{:,.2f}",
         "Avg Cost (Rs)":         "{:.4f}",
         "Daily Return (%)":      "{:+.3f}",
@@ -1056,8 +968,8 @@ if trades:
     }
     styled = (
         trade_df.style
-        .applymap(hl_action, subset=["Action"])
-        .applymap(hl_pnl,    subset=["Trade PnL (Rs)"])
+        .map(hl_action, subset=["Action"])
+        .map(hl_pnl,    subset=["Trade PnL (Rs)"])
         .format(fmt, na_rep="—")
     )
     st.dataframe(styled, use_container_width=True, height=380)
@@ -1146,15 +1058,10 @@ stats = {
     "Negative Days (%)":        (df["Daily_Return"] < 0).mean() * 100,
     "Total Trading Days":       len(df),
 }
-stats_df = pd.DataFrame(list(stats.items()), columns=["Metric", "Value"])
-def fmt_stat(v):
-    if isinstance(v, float):
-        return f"Rs {v:,.2f}" if abs(v) > 1 else f"{v:.3f}%"
-    return str(int(v))
-st.dataframe(
-    stats_df.style.format({"Value": fmt_stat}),
-    use_container_width=True, hide_index=True
+stats_df = pd.DataFrame(
+    [(k, format_stat(k, v)) for k, v in stats.items()], columns=["Metric", "Value"]
 )
+st.dataframe(stats_df, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 st.caption("Educational/backtesting simulator only. Not financial advice. Data via yfinance.")

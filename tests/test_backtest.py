@@ -76,3 +76,10 @@ def test_stats_are_formatted_by_unit_not_by_size():
     assert format_stat("All-Time High (Rs)", 24000.5) == "Rs 24,000.50"
     assert format_stat("Start NAV / Price (Rs)", 0.5) == "Rs 0.50"
     assert format_stat("Total Trading Days", 1234) == "1,234"
+
+
+def test_too_little_data_or_bad_years_raise_clear_errors():
+    with pytest.raises(ValueError, match="at least 2"):
+        run_backtest(frame([100]), 1.0, 2.0, 1000, 0, 1.0)
+    with pytest.raises(ValueError, match="years"):
+        run([100, 99, 98], years=0)

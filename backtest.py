@@ -14,6 +14,10 @@ def run_backtest(df, buy_drop_pct, sell_rise_pct, invest_per_signal, stepup_pct,
     or an index NAV). Whole units only were bought before, so on an instrument priced above the
     per-signal amount (the default, Nifty 50, trades at ~Rs 20,000+) no buy ever happened.
     """
+    if len(df) < 2:
+        raise ValueError("run_backtest needs at least 2 price rows.")
+    if years <= 0:
+        raise ValueError("years must be positive.")
     units_held = 0.0
     buy_cost_basis = []  # (units, price)
     trades, port_vals = [], []
